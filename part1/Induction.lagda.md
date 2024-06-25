@@ -904,6 +904,16 @@ for all naturals `m`, `n`, and `p`.
 
 ```agda
 -- Your code goes here
+*-distrib-+ : ∀ (m n p : ℕ) → (m + n) * p ≡ m * p + n * p 
+*-distrib-+ zero n p = refl
+*-distrib-+ (suc m) n p = 
+  begin
+    (suc m + n) * p
+  ≡⟨ cong (p +_) (*-distrib-+ m n p) ⟩
+    p + (m * p + n * p) 
+  ≡⟨ sym (+-assoc p (m * p) (n * p)) ⟩ 
+    (suc m) * p + n * p
+  ∎  
 ```
 
 
@@ -917,6 +927,16 @@ for all naturals `m`, `n`, and `p`.
 
 ```agda
 -- Your code goes here
+*-assoc : ∀ (m n p : ℕ) → (m * n) * p ≡ m * (n * p)
+*-assoc zero n p = refl
+*-assoc (suc m) n p = 
+  begin
+    (suc m * n) * p
+  ≡⟨ *-distrib-+ n (m * n) p ⟩ 
+    (n * p) + (m * n * p)
+  ≡⟨ cong ((n * p) +_) (*-assoc m n p) ⟩ 
+    (suc m) * (n * p)
+  ∎
 ```
 
 
@@ -931,6 +951,19 @@ you will need to formulate and prove suitable lemmas.
 
 ```agda
 -- Your code goes here
+*-comm : ∀ (m n : ℕ) → m * n ≡ n * m
+*-comm zero zero = refl 
+*-comm (suc m) zero rewrite *-comm m zero = refl 
+*-comm (suc m) (suc n) = 
+  begin
+    (suc n) + m * (suc n)
+  ≡⟨ cong ((suc n) +_) (*-comm m (suc n)) ⟩ 
+    (suc n) + (suc n) * m
+  ≡⟨⟩ 
+    (suc n) + (m + (n * m))
+  ≡⟨⟩ 
+    n * (suc m)
+  ∎
 ```
 
 
