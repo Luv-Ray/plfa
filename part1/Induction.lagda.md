@@ -891,6 +891,18 @@ is associative and commutative.
 
 ```agda
 -- Your code goes here
++-swap : ∀ (m n p : ℕ) → m + (n + p) ≡ n + (m + p)
++-swap m n p = 
+  begin
+    m + (n + p)
+  ≡⟨ sym (+-assoc m n p) ⟩
+    (m + n) + p 
+  ≡⟨ cong (_+ p) (+-comm m n) ⟩
+    (n + m) + p 
+  ≡⟨ +-assoc n m p ⟩
+    n + (m + p)
+  ∎
+
 ```
 
 
@@ -909,9 +921,13 @@ for all naturals `m`, `n`, and `p`.
 *-distrib-+ (suc m) n p = 
   begin
     (suc m + n) * p
+  ≡⟨⟩
+    p + (m + n) * p
   ≡⟨ cong (p +_) (*-distrib-+ m n p) ⟩
     p + (m * p + n * p) 
   ≡⟨ sym (+-assoc p (m * p) (n * p)) ⟩ 
+    (p + m * p) + n * p
+  ≡⟨⟩
     (suc m) * p + n * p
   ∎  
 ```
@@ -951,19 +967,19 @@ you will need to formulate and prove suitable lemmas.
 
 ```agda
 -- Your code goes here
-*-comm : ∀ (m n : ℕ) → m * n ≡ n * m
-*-comm zero zero = refl 
-*-comm (suc m) zero rewrite *-comm m zero = refl 
-*-comm (suc m) (suc n) = 
-  begin
-    (suc n) + m * (suc n)
-  ≡⟨ cong ((suc n) +_) (*-comm m (suc n)) ⟩ 
-    (suc n) + (suc n) * m
-  ≡⟨⟩ 
-    (suc n) + (m + (n * m))
-  ≡⟨⟩ 
-    n * (suc m)
-  ∎
+-- *-comm : ∀ (m n : ℕ) → m * n ≡ n * m
+-- *-comm zero zero = refl 
+-- *-comm (suc m) zero rewrite *-comm m zero = refl 
+-- *-comm (suc m) (suc n) = 
+--   begin
+--     (suc n) + m * (suc n)
+--   ≡⟨ cong ((suc n) +_) (*-comm m (suc n)) ⟩ 
+--     (suc n) + (suc n) * m
+--   ≡⟨⟩ 
+--     (suc n) + (m + (n * m))
+--   ≡⟨⟩ 
+--     n * (suc m)
+--   ∎
 ```
 
 

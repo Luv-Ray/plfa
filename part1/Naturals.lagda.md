@@ -440,6 +440,21 @@ Compute `3 + 4`, writing out your reasoning as a chain of equations, using the e
 
 ```agda
 -- Your code goes here
+_ : 3 + 4 ≡ 7
+_ =
+  begin
+    3 + 4
+  ≡⟨⟩    -- is shorthand for
+    (suc (suc (suc zero))) + (suc (suc (suc (suc zero))))
+  ≡⟨⟩    -- inductive case
+    suc ((suc (suc zero)) + (suc (suc (suc (suc zero)))))
+  ≡⟨⟩    -- inductive case
+    suc (suc (suc zero + (suc (suc (suc (suc zero))))))
+  ≡⟨⟩    -- base case
+    suc (suc (suc (suc (suc (suc (suc zero))))))
+  ≡⟨⟩    -- is longhand for
+    7
+  ∎
 ```
 
 
@@ -502,6 +517,18 @@ Compute `3 * 4`, writing out your reasoning as a chain of equations, using the e
 
 ```agda
 -- Your code goes here
+_ =
+  begin
+    3 * 4
+  ≡⟨⟩
+    4 + (2 * 4)
+  ≡⟨⟩
+    4 + 4 + (1 * 4)
+  ≡⟨⟩
+    4 + 4 + 4 + (0 * 4)
+  ≡⟨⟩
+    12
+  ∎
 ```
 
 
@@ -516,6 +543,13 @@ Check that `3 ^ 4` is `81`.
 
 ```agda
 -- Your code goes here
+_^_ : ℕ → ℕ → ℕ
+n ^ zero = 1
+n ^ (suc m) = (n ^ m) * n
+
+_ : 3 ^ 4 ≡ 81
+_ = refl
+
 ```
 
 
@@ -599,6 +633,18 @@ Compute `5 ∸ 3` and `3 ∸ 5`, writing out your reasoning as a chain of equati
 
 ```agda
 -- Your code goes here
+_ = 
+  begin 
+    5 ∸ 3
+  ≡⟨⟩
+    4 ∸ 2
+  ≡⟨⟩
+    3 ∸ 1
+  ≡⟨⟩
+    2 ∸ 0
+  ≡⟨⟩ 
+    2
+  ∎
 ```
 
 
@@ -946,6 +992,54 @@ Confirm that these both give the correct answer for zero through four.
 
 ```agda
 -- Your code goes here
+inc : Bin → Bin
+inc ⟨⟩ = ⟨⟩ I
+inc (n O) = n I
+inc (n I) = (inc n) O
+
+— =
+  begin 
+    inc (⟨⟩ I O I O)
+  ≡⟨⟩
+    ⟨⟩ I O I I
+  ∎
+
+_ = 
+  begin
+    inc (⟨⟩ I)
+  ≡⟨⟩
+    ⟨⟩ I O
+  ∎
+  
+_ =
+  begin
+    inc (⟨⟩ I O I I)
+  ≡⟨⟩
+    ⟨⟩ I I O O
+  ∎
+
+to : ℕ → Bin
+to 0 = ⟨⟩ O
+to (suc n) = inc (to n)
+
+from : Bin → ℕ
+from ⟨⟩ = 0
+from (n I) = 1 + 2 * from n
+from (n O) = 2 * from n
+
+_ =
+  begin
+    to 3
+  ≡⟨⟩
+    ⟨⟩ I I
+  ∎
+
+_ = 
+  begin
+    from (⟨⟩ I I)
+  ≡⟨⟩
+    3
+  ∎
 ```
 
 
