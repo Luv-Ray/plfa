@@ -1040,24 +1040,6 @@ for all naturals `m`, `n`, and `p`.
 ```agda
 -- Your code goes here
 monus-plus-assoc : ∀ (m n p : ℕ) → m ∸ n ∸ p ≡ m ∸ (n + p)
--- monus-plus-assoc m zero p = refl
--- monus-plus-assoc m (suc n) p =
---   begin
---     m ∸ (suc n) ∸ p
---   ≡⟨⟩ 
---     m ∸ (suc n + p)
---   ∎
-monus-suc : ∀ (m n : ℕ) → (suc m) ∸ n ≡ suc (m ∸ n)
-monus-suc m zero = refl
-monus-suc m (suc n) = 
-  begin
-    (suc m) ∸ (suc n)
-  ≡⟨⟩
-    m ∸ n
-  ≡⟨ cong suc (monus-suc m n) ⟩
-    suc (m ∸ suc n)
-  ∎
-  
 monus-plus-assoc zero n p =
   begin
     (zero ∸ n) ∸ p
@@ -1067,15 +1049,9 @@ monus-plus-assoc zero n p =
     zero
   ≡⟨ sym (zero-monus (n + p)) ⟩
     zero ∸ (n + p)
-  ∎
-monus-plus-assoc (suc m) n p = 
-  begin
-    (suc m ∸ n) ∸ p
-  ≡⟨⟩ 
-    suc (m ∸ n) ∸ p
-  ≡⟨ monus-plus-assoc ⟩
-    suc m ∸ (n + p)
-  ∎
+  ∎ 
+monus-plus-assoc (suc m) zero p = refl
+monus-plus-assoc (suc m) (suc n) p rewrite monus-plus-assoc m n p = refl
 ```
 
 
