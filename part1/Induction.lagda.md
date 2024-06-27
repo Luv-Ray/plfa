@@ -967,6 +967,36 @@ you will need to formulate and prove suitable lemmas.
 
 ```agda
 -- Your code goes here
+*-left-identity : ∀ (n : ℕ) → 1 * n ≡ n 
+*-left-identity zero = refl
+*-left-identity (suc n) = 
+  begin
+    1 * suc n
+  ≡⟨ +-comm (suc n) 0 ⟩
+    suc n 
+  ∎
+
+*-right-identity : ∀ (n : ℕ) → n * 1 ≡ n
+*-right-identity zero = refl
+*-right-identity (suc n) rewrite *-right-identity n = refl
+
+-- TODO
+
+-- *-suc : ∀ (m n : ℕ) → m + m * n ≡ m * (suc n)
+-- *-suc zero n = refl
+-- *-suc m n = 
+--   begin
+--     m + m * n
+--   ≡⟨ *-right-identity m ⟩ 
+--     m * 1 + m * n
+--   ≡⟨ *-distrib-+ ⟩
+--     suc (m + m * n)
+--   ≡⟨ cong suc (*-suc m n) ⟩
+--     suc (m * (suc n))
+--   ≡⟨⟩
+--     suc m * suc n
+--   ∎
+
 -- *-comm : ∀ (m n : ℕ) → m * n ≡ n * m
 -- *-comm zero zero = refl 
 -- *-comm (suc m) zero rewrite *-comm m zero = refl 
@@ -993,6 +1023,9 @@ for all naturals `n`. Did your proof require induction?
 
 ```agda
 -- Your code goes here
+zero-monus : ∀ (n : ℕ) → zero ∸ n ≡ zero
+zero-monus zero = refl
+zero-monus (suc n) = refl
 ```
 
 
@@ -1006,6 +1039,43 @@ for all naturals `m`, `n`, and `p`.
 
 ```agda
 -- Your code goes here
+monus-plus-assoc : ∀ (m n p : ℕ) → m ∸ n ∸ p ≡ m ∸ (n + p)
+-- monus-plus-assoc m zero p = refl
+-- monus-plus-assoc m (suc n) p =
+--   begin
+--     m ∸ (suc n) ∸ p
+--   ≡⟨⟩ 
+--     m ∸ (suc n + p)
+--   ∎
+monus-suc : ∀ (m n : ℕ) → (suc m) ∸ n ≡ suc (m ∸ n)
+monus-suc m zero = refl
+monus-suc m (suc n) = 
+  begin
+    (suc m) ∸ (suc n)
+  ≡⟨⟩
+    m ∸ n
+  ≡⟨ cong suc (monus-suc m n) ⟩
+    suc (m ∸ suc n)
+  ∎
+  
+monus-plus-assoc zero n p =
+  begin
+    (zero ∸ n) ∸ p
+  ≡⟨ cong (_∸ p) (zero-monus n) ⟩
+    zero ∸ p 
+  ≡⟨ zero-monus p ⟩
+    zero
+  ≡⟨ sym (zero-monus (n + p)) ⟩
+    zero ∸ (n + p)
+  ∎
+monus-plus-assoc (suc m) n p = 
+  begin
+    (suc m ∸ n) ∸ p
+  ≡⟨⟩ 
+    suc (m ∸ n) ∸ p
+  ≡⟨ monus-plus-assoc ⟩
+    suc m ∸ (n + p)
+  ∎
 ```
 
 
