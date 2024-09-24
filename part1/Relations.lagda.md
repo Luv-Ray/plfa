@@ -553,6 +553,27 @@ Show that multiplication is monotonic with regard to inequality.
 
 ```agda
 -- Your code goes here
+open import Data.Nat using (_*_)
+open import Data.Nat.Properties using (*-comm)
+
+*-monoʳ-≤ : ∀ (n p q : ℕ)
+  → p ≤ q 
+  → n * p ≤ n * q 
+*-monoʳ-≤ zero p q _ = z≤n
+*-monoʳ-≤ (suc n) p q p≤q = +-mono-≤ p q (n * p) (n * q) p≤q (*-monoʳ-≤ n p q p≤q)
+
+*-monoˡ-≤ : ∀ (n p q : ℕ) 
+  → p ≤ q 
+  → p * n ≤ q * n 
+*-monoˡ-≤ zero p q _ rewrite *-comm p zero = z≤n
+*-monoˡ-≤ n p q p≤q rewrite *-comm p n | *-comm q n = *-monoʳ-≤ n p q p≤q
+
+*-mono-≤ : ∀ (m n p q : ℕ)
+  → m ≤ n
+  → p ≤ q 
+  → m * p ≤ n * q 
+--- m * p ≤ m * q ≤ n * q
+*-mono-≤ m n p q m≤n p≤q = ≤-trans (*-monoʳ-≤ m p q p≤q) (*-monoˡ-≤ q m n m≤n)
 ```
 
 
@@ -601,6 +622,12 @@ exercise exploits the relation between < and ≤.)
 
 ```agda
 -- Your code goes here
+<-trans : ∀ {m n p : ℕ}
+  → m < p 
+  → p < n
+  → m < n
+<-trans z<s (s<s p<n) = z<s
+<-trans (s<s m<p) (s<s p<n) = s<s (<-trans m<p p<n)
 ```
 
 #### Exercise `trichotomy` (practice) {#trichotomy}
@@ -636,6 +663,17 @@ Show that `suc m ≤ n` implies `m < n`, and conversely.
 
 ```agda
 -- Your code goes here
+≤→< : ∀ {m n : ℕ}
+  → suc m ≤ n 
+  → m < n 
+≤→< {zero} {suc n} _ = z<s
+≤→< {suc m} {suc n} (s≤s m≤n) = s<s (≤→< m≤n)
+
+<→≤ : ∀ {m n : ℕ}
+  → m < n 
+  → suc m ≤ n 
+<→≤ z<s = s≤s z≤n
+<→≤ (s<s m<n) = s≤s (<→≤ m<n)
 ```
 
 #### Exercise `<-trans-revisited` (practice) {#less-trans-revisited}
@@ -753,6 +791,12 @@ Show that the sum of two odd numbers is even.
 
 ```agda
 -- Your code goes here
+o+o≡e : ∀ {m n : ℕ}
+  → odd m 
+  → odd n 
+  → even (m + n)
+
+o+o≡e {suc m} {n} (suc em) on rewrite (+-comm m n) = suc (o+e≡o on em)
 ```
 
 #### Exercise `Bin-predicates` (stretch) {#Bin-predicates}
