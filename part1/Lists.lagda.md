@@ -58,14 +58,18 @@ and `1 ∷ (2 ∷ [])` is a list of the remaining elements, called the
 _tail_. A list is a strange beast: it has a head and a tail,
 nothing in between, and the tail is itself another list!
 
-As we've seen, parameterised types can be translated to
-indexed types. The definition above is equivalent to the following:
+As we've seen, some parameterised types can be translated to
+indexed types. The definition above translates to the following:
 ```agda
-data List′ : Set → Set where
+data List′ : Set → Set₁ where
   []′  : ∀ {A : Set} → List′ A
   _∷′_ : ∀ {A : Set} → A → List′ A → List′ A
 ```
-Each constructor takes the parameter as an implicit argument.
+This is almost equivalent, save that with parametrised types the result
+can be in `Set`, whereas for technical reasons indexed types require the
+result to be `Set₁`.
+
+Each constructor of `List` takes the parameter as an implicit argument.
 Thus, our example list could also be written:
 ```agda
 _ : List ℕ
@@ -1119,8 +1123,7 @@ import Data.List.Relation.Unary.All using (All; []; _∷_)
 import Data.List.Relation.Unary.Any using (Any; here; there)
 import Data.List.Membership.Propositional using (_∈_)
 import Data.List.Properties
-  using (reverse-++-commute; map-compose; map-++-commute; foldr-++)
-  renaming (mapIsFold to map-is-foldr)
+  using (reverse-++-commute; map-compose; map-++-commute; foldr-++; map-is-foldr)
 import Algebra.Structures using (IsMonoid)
 import Relation.Unary using (Decidable)
 import Relation.Binary using (Decidable)
